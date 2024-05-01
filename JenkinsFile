@@ -1,0 +1,65 @@
+pipeline {
+    agent any
+    
+    environment {
+        GIT_REPO_URL = 'https://github.com/anirudhpratapsingh/jenkins-demo.git'
+        WEB_SERVER_HOST = '54.157.33.215'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    def gitResult = git branch: 'main', credentialsId: '3c32a489-c641-428c-8162-bc463f5fb0f4', url: env.GIT_REPO_URL, returnStatus: true
+                    def gitExitCode = gitResult.GIT_BRANCH ? 0 : 1
+                    echo "Git checkout exit code: ${gitExitCode}"
+
+                    if (gitExitCode != 0) {
+                        error('Git checkout failed')
+                    }
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script {
+                sh 'composer install'
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                script {
+                sh 'vendor/bin/phpunit --debug'
+                }
+            }
+        }
+
+        stage('Deploy to EC2') {
+            steps {
+                withCredentials([
+                    sshUserPrivateKey(credentialsId: 'webserver-key', keyFileVariable: 'SSH_KEY_FILE', usernameVariable: 'SSH_USERNAME')
+                ]) {
+                    script {
+                        // Variables
+                        def buildArtifactsPath = '/var/lib/jenkins/workspace/PhysicsGalaxy/src/*'
+
+                        // Removing existing files on the web server
+                        sh "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} ${SSH_USERNAME}@${env.WEB_SERVER_HOST} 'rm -rf /var/www/deploy/*'"
+
+                        // Creating dirctory for deploying the code 
+                        sh "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} ${SSH_USERNAME}@${env.WEB_SERVER_HOST} 'sudo mkdir -p /var/www/deploy/'"
+
+                        // Changing Owner for the directory created
+                        sh "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} ${SSH_USERNAME}@${env.WEB_SERVER_HOST} 'sudo chown ubuntu:ubuntu /var/www/deploy'"
+
+                        // Copying files from Jenkins to web server
+                        sh "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} -r ${buildArtifactsPath} ${SSH_USERNAME}@${env.WEB_SERVER_HOST}:/var/www/deploy/"
+                    }
+                }
+            }
+        }
+    }
+}
