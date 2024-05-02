@@ -59,18 +59,18 @@ pipeline {
                         def buildArtifactsPath = '/var/lib/jenkins/workspace/PhysicsGalaxy/*'
 
                         // Removing existing files on the web server
-                        sh "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} ${SSH_USERNAME}@${env.WEB_SERVER_HOST} 'rm -rf /var/www/deploy/*'"
+                        sh "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} ${SSH_USERNAME}@${env.WEB_SERVER_HOST} 'rm -rf /var/www/physicsgalaxy.com/*'"
 
                         // Creating dirctory for deploying the code 
-                        sh "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} ${SSH_USERNAME}@${env.WEB_SERVER_HOST} 'sudo mkdir -p /var/www/deploy/'"
+                        sh "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} ${SSH_USERNAME}@${env.WEB_SERVER_HOST} 'sudo mkdir -p /var/www/physicsgalaxy.com/'"
 
                         // Changing Owner for the directory created
-                        sh "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} ${SSH_USERNAME}@${env.WEB_SERVER_HOST} 'sudo chown ubuntu:ubuntu /var/www/deploy'"
+                        sh "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} ${SSH_USERNAME}@${env.WEB_SERVER_HOST} 'sudo chown ubuntu:ubuntu /var/www/physicsgalaxy.com'"
 
                         // Copying files from Jenkins to web server
-                        sh "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} -r ${buildArtifactsPath} ${SSH_USERNAME}@${env.WEB_SERVER_HOST}:/var/www/deploy/"
+                        sh "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} -r ${buildArtifactsPath} ${SSH_USERNAME}@${env.WEB_SERVER_HOST}:/var/www/physicsgalaxy.com/"
 			// Moving files from the dist folder
-                        sh "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} ${SSH_USERNAME}@${env.WEB_SERVER_HOST} 'sudo mv /var/www/deploy/dist/* /var/www/deploy'"
+                        sh "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} ${SSH_USERNAME}@${env.WEB_SERVER_HOST} 'sudo mv /var/www/physicsgalaxy.com/dist/* /var/www/physicsgalaxy.com'"
                     }
                 }
             }
