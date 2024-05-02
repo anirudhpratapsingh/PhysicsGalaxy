@@ -2,8 +2,8 @@ import React from "react";
 import "./LandingPage.css";
 import galaxylogo from "./images/galaxy-logo.png";
 import pglogo from "../../assets/images/galaxy-logo-111.png";
-import mentorX from "../../assets/images/mentor-x.png";
-import mentorX2 from "../../assets/images/mentor-x2.png";
+//import mentorX from "../../assets/images/mentor-x.png";
+//import mentorX2 from "../../assets/images/mentor-x2.png";
 import course_banner from "../../assets/images/course_banner.jpg";
 import dummy_pdf from "../../assets/images/blank.pdf";
 import videoImg from "./images/video-img.jpg";
@@ -830,7 +830,7 @@ export default function LandingPage() {
                 <div className="col-lg-6">
                   <div className="leftside-col6 ">
                     {/* <div className="page-logo" >
-                      <img src={mentorX2} alt="Physics Galaxy Logo" />
+                      <img src={galaxylogo} alt="Physics Galaxy Logo" />
                     </div> */}
                     <div className="leftside-heading pb-2">
                       <div className="page-logo text-center" >
@@ -1307,7 +1307,7 @@ export default function LandingPage() {
           <div className="container">
             <div className="p-sec-mob">
               <div className="pg-logo-mb text-center mb-4 imgCorr">
-                <img src={mentorX2} alt="Physics Galaxy Logo" />
+                <img src={galaxylogo} alt="Physics Galaxy Logo" />
                 <div className="leftside-heading pb-2 text-center">
                   <h2 className="text-center">
                     LEARN HOW TO STUDY EFFECTIVELY FOR JEE & NEET EXAMINATIONS
