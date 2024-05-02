@@ -82,7 +82,7 @@ pipeline {
                         sh "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} ${SSH_USERNAME}@${env.WEB_SERVER_HOST} 'sudo mv /var/www/physicsgalaxy.com/dist/* /var/www/physicsgalaxy.com'"
 
 			// Upload artifacts to S3
-                        sh "aws s3 sync /var/lib/jenkins/workspace/PhysicsGalaxy/dist/ s3://${env.S3_BUCKET}/"
+                        sh "aws s3 sync /var/lib/jenkins/workspace/PhysicsGalaxy/dist s3://${env.S3_BUCKET}/"
                     }
                 }
             }
