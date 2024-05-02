@@ -20,11 +20,23 @@ pipeline {
                 }
             }
         }
+        
+        stage('Install dependencies') {
+            steps {
+	        script {
+
+                sh 'npm install'
+
+		}
+            }
+        }
 
         stage('Build') {
             steps {
                 script {
-                echo "hello"
+                  
+		  sh "npm run build"
+
                 }
             }
         }
@@ -44,7 +56,7 @@ pipeline {
                 ]) {
                     script {
                         // Variables
-                        def buildArtifactsPath = '/var/lib/jenkins/workspace/PhysicsGalaxy/src/*'
+                        def buildArtifactsPath = '/var/lib/jenkins/workspace/PhysicsGalaxy/*'
 
                         // Removing existing files on the web server
                         sh "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} ${SSH_USERNAME}@${env.WEB_SERVER_HOST} 'rm -rf /var/www/deploy/*'"
