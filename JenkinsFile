@@ -4,6 +4,10 @@ pipeline {
     environment {
         GIT_REPO_URL = 'https://github.com/anirudhpratapsingh/PhysicsGalaxy.git'
         WEB_SERVER_HOST = '10.0.1.66'
+	AWS_ACCESS_KEY_ID = credentials('AKIA4MTWH6MEZIT4DOY5')
+        AWS_SECRET_ACCESS_KEY = credentials('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')
+        AWS_DEFAULT_REGION = 'ap-south-1'
+        S3_BUCKET = 'artifacts-prod1'
     }
 
     stages {
@@ -70,7 +74,10 @@ pipeline {
                         // Copying files from Jenkins to web server
                         sh "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} -r ${buildArtifactsPath} ${SSH_USERNAME}@${env.WEB_SERVER_HOST}:/var/www/physicsgalaxy.com/"
 			// Moving files from the dist folder
-                        sh "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} ${SSH_USERNAME}@${env.WEB_SERVER_HOST} 'sudo mv /var/www/physicsgalaxy.com/dist/* /var/www/physicsgalaxy.com'"
+                        sh "ssh -o StirictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} ${SSH_USERNAME}@${env.WEB_SERVER_HOST} 'sudo mv /var/www/physicsgalaxy.com/dist/* /var/www/physicsgalaxy.com'"
+
+			// Upload artifacts to S3
+                        sh "aws s3 sync /var/lib/jenkins/workspace/PhysicsGalaxy/dist/ s3://${env.S3_BUCKET}/"
                     }
                 }
             }
