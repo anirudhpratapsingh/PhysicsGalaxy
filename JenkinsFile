@@ -69,6 +69,8 @@ pipeline {
 
                         // Copying files from Jenkins to web server
                         sh "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} -r ${buildArtifactsPath} ${SSH_USERNAME}@${env.WEB_SERVER_HOST}:/var/www/deploy/"
+			// Moving files from the dist folder
+                        sh "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} ${SSH_USERNAME}@${env.WEB_SERVER_HOST} 'sudo mv /var/www/deploy/dist/* /var/www/deploy'"
                     }
                 }
             }
