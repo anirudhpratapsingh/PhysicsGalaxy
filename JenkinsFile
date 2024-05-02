@@ -4,9 +4,7 @@ pipeline {
     environment {
         GIT_REPO_URL = 'https://github.com/anirudhpratapsingh/PhysicsGalaxy.git'
         WEB_SERVER_HOST = '10.0.1.66'
-	AWS_ACCESS_KEY_ID = credentials('AKIA4MTWH6MEZIT4DOY5')
-        AWS_SECRET_ACCESS_KEY = credentials('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')
-        AWS_DEFAULT_REGION = 'ap-south-1'
+	AWS_DEFAULT_REGION = 'ap-south-1'
         S3_BUCKET = 'artifacts-prod1'
     }
 
@@ -57,6 +55,9 @@ pipeline {
             steps {
                 withCredentials([
                     sshUserPrivateKey(credentialsId: 'webserver-key', keyFileVariable: 'SSH_KEY_FILE', usernameVariable: 'SSH_USERNAME')
+		    [$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'Accesskey'],
+                    [$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_SECRET_ACCESS_KEY', credentialsId: 'Secretkey']
+
                 ]) {
                     script {
                         // Variables
