@@ -54,7 +54,7 @@ pipeline {
         stage('Deploy to EC2') {
             steps {
                 withCredentials([
-                    sshUserPrivateKey(credentialsId: 'webserver-key', keyFileVariable: 'SSH_KEY_FILE', usernameVariable: 'SSH_USERNAME')
+                    sshUserPrivateKey(credentialsId: 'webserver-key', keyFileVariable: 'SSH_KEY_FILE', usernameVariable: 'SSH_USERNAME'),
 		    [$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'Accesskey'],
                     [$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_SECRET_ACCESS_KEY', credentialsId: 'Secretkey']
 
