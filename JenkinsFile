@@ -75,7 +75,7 @@ pipeline {
                         sh "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} ${SSH_USERNAME}@${env.WEB_SERVER_HOST} 'sudo chown ubuntu:ubuntu /var/www/physicsgalaxy.com'"
                         
                         // Moving files from the dist folder
-			sh "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} ${SSH_USERNAME}@${env.WEB_SERVER_HOST} 'sudo cp -r /var/lib/jenkins/workspace/PhysicsGalaxy/dist/* /var/lib/jenkins/workspace/PhysicsGalaxy'"
+			sh "sudo cp -r /var/lib/jenkins/workspace/PhysicsGalaxy/dist/* /var/lib/jenkins/workspace/PhysicsGalaxy"
 
 
                         // Copying files from Jenkins to web server
