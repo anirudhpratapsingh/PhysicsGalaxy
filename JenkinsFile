@@ -63,7 +63,7 @@ pipeline {
                  {
                     script {
                         // Variables
-                        def buildArtifactsPath = '/var/lib/jenkins/workspace/PhysicsGalaxy/*'
+                        def buildArtifactsPath = '/var/lib/jenkins/workspace/PhysicsGalaxy/.*'
 
                         // Removing existing files on the web server
                         sh "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} ${SSH_USERNAME}@${env.WEB_SERVER_HOST} 'sudo rm -rf /var/www/physicsgalaxy.com'"
@@ -82,7 +82,7 @@ pipeline {
                         //sh "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} -r -f ${buildArtifactsPath} ${SSH_USERNAME}@${env.WEB_SERVER_HOST}:/var/www/physicsgalaxy.com/"
 
 			// Copying files from Jenkins to web server with force overwrite using rsync
-                        sh "rsync -e 'ssh -o StrictHostKeyChecking=no -i ${SSH_KEY_FILE}' -av --copy-links --include='*/' --include='.*' --exclude='*' -r ${buildArtifactsPath} ${SSH_USERNAME}@${env.WEB_SERVER_HOST}:/var/www/physicsgalaxy.com/"
+                        sh "rsync -e 'ssh -o StrictHostKeyChecking=no -i ${SSH_KEY_FILE}' -av --copy-links -r ${buildArtifactsPath} ${SSH_USERNAME}@${env.WEB_SERVER_HOST}:/var/www/physicsgalaxy.com/"
 
 
 			// Moving files from the dist folder
