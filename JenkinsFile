@@ -78,7 +78,7 @@ pipeline {
                         //sh "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} -r -f ${buildArtifactsPath} ${SSH_USERNAME}@${env.WEB_SERVER_HOST}:/var/www/physicsgalaxy.com/"
 
 			// Copying files from Jenkins to web server with force overwrite using rsync
-                        sh "rsync -e 'ssh -o StrictHostKeyChecking=no -i ${SSH_KEY_FILE}' -v -r ${buildArtifactsPath} ${SSH_USERNAME}@${env.WEB_SERVER_HOST}:/var/www/physicsgalaxy.com/"
+                        sh "rsync -e 'ssh -o StrictHostKeyChecking=no -i ${SSH_KEY_FILE}' -v --delete -r ${buildArtifactsPath} ${SSH_USERNAME}@${env.WEB_SERVER_HOST}:/var/www/physicsgalaxy.com/"
 
 
 			// Moving files from the dist folder
