@@ -43,21 +43,6 @@ pipeline {
             }
         }
 
-
-        stage('Upload Artifacts to S3') {
-    steps {
-        dir('/var/lib/jenkins/workspace/PhysicsGalaxy') {
-            // Inside this block, you can perform operations related to the current directory
-            withAWS(region:'ap-south-1', credentials:'Accesskeys') {
-                // Upload files from working directory 'dist' in your project workspace
-                s3Upload(bucket: "artifacts-prod1", workingDir: 'dist')
-            }
-        }
-    }
-}
-
-
-
         stage('Test') {
             steps {
                 script {
@@ -70,12 +55,12 @@ pipeline {
             steps {
                 withCredentials([
                     sshUserPrivateKey(credentialsId: 'webserver-key', keyFileVariable: 'SSH_KEY_FILE', usernameVariable: 'SSH_USERNAME'),
-                   //  [
-                   //     $class: 'AmazonWebServicesCredentialsBinding',
-                   //     accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                   //     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
-                   //     credentialsId: 'Accesskeys'
-                   // ]
+                     [
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
+                        credentialsId: 'Accesskeys'
+                    ]
 
                 ]) {
                     script {
@@ -97,7 +82,7 @@ pipeline {
                         sh "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} ${SSH_USERNAME}@${env.WEB_SERVER_HOST} 'sudo mv /var/www/physicsgalaxy.com/dist/* /var/www/physicsgalaxy.com'"
 
 			// Upload artifacts to S3
-                        //sh "aws s3 sync /var/lib/jenkins/workspace/PhysicsGalaxy/dist s3://${env.S3_BUCKET}/"
+                        sh "aws s3 sync /var/lib/jenkins/workspace/PhysicsGalaxy/dist s3://${env.S3_BUCKET}/"
                     }
                 }
             }
