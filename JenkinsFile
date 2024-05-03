@@ -53,7 +53,7 @@ pipeline {
 
         stage('Deploy to EC2') {
             steps {
-                withCredentials(bindings: [
+                withCredentials([
 		
                     sshUserPrivateKey(credentialsId: 'webserver-key', keyFileVariable: 'SSH_KEY_FILE', usernameVariable: 'SSH_USERNAME'),
                     [
@@ -75,7 +75,7 @@ pipeline {
                         sh "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} ${SSH_USERNAME}@${env.WEB_SERVER_HOST} 'sudo chown ubuntu:ubuntu /var/www/physicsgalaxy.com'"
 
                         // Copying files from Jenkins to web server
-                        sh "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} -r ${buildArtifactsPath} ${SSH_USERNAME}@${env.WEB_SERVER_HOST}:/var/www/physicsgalaxy.com/"
+                        sh "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} -r -f ${buildArtifactsPath} ${SSH_USERNAME}@${env.WEB_SERVER_HOST}:/var/www/physicsgalaxy.com/"
 			// Moving files from the dist folder
                         sh "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY_FILE} ${SSH_USERNAME}@${env.WEB_SERVER_HOST} 'sudo mv /var/www/physicsgalaxy.com/dist/* /var/www/physicsgalaxy.com'"
 
