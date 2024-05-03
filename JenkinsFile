@@ -45,21 +45,23 @@ pipeline {
 
 
         stage('Upload Artifacts to S3') {
+    steps {
+        dir('/var/lib/jenkins/workspace/PhysicsGalaxy') {
+            // Log current directory
+            pwd()
 
-        dir('/var/lib/jenkins/workspace/PhysicsGalaxy'){
-
-            pwd(); //Log current directory
-
-            withAWS(region:'ap-south-1',credentials:'Accesskeys') {
-
-                 def identity=awsIdentity();//Log AWS credentials
+            // Inside this block, you can perform operations related to the current directory
+            withAWS(region:'ap-south-1', credentials:'Accesskeys') {
+                // Log AWS credentials
+                def identity = awsIdentity()
 
                 // Upload files from working directory 'dist' in your project workspace
-                s3Upload(bucket:"artifacts-prod1", workingDir:'dist');
+                s3Upload(bucket: "artifacts-prod1", workingDir: 'dist')
             }
-
         }
     }
+}
+
 
         stage('Test') {
             steps {
